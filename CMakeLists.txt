@@ -3,8 +3,12 @@ project(pong)
 
 set(CMAKE_CXX_STANDARD 20)
 
-add_executable(pong src/main.cpp
+add_executable(
+        pong
+
+        src/main.cpp
         src/paddle.cpp
-        src/paddle.h
+        src/paddle.hpp
         src/ball.cpp
-        src/ball.h)
+        src/ball.hpp
+)

@@ -1,10 +1,6 @@
-//
-// Created by Filip Růžička on 19.11.2025.
-//
-
 #ifndef PONG_BALL_H
 #define PONG_BALL_H
-#include "paddle.h"
+#include "paddle.hpp"
 
 
 class ball {

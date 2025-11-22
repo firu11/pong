@@ -7,8 +7,10 @@ add_executable(
         pong
 
         src/main.cpp
-        src/paddle.cpp
-        src/paddle.hpp
         src/ball.cpp
-        src/ball.hpp
+        src/paddle.cpp
+
+        include/ball.hpp
+        include/paddle.hpp
+        include/utils.hpp
 )

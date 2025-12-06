@@ -11,5 +11,16 @@ inline void set_raw(bool set) {
     }
 }
 
+inline void clearTerminalScreen() {
+    system("clear");
+}
+
+inline void hideCursor() {
+    std::cout << "\033[?25l"; // ANSI code to hide cursor
+}
+
+inline void showCursor() {
+    std::cout << "\033[?25h"; // ANSI code to show cursor
+}
 
 #endif //PONG_UTILS_H

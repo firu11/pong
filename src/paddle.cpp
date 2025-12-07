@@ -32,11 +32,18 @@ paddle::rect paddle::getRect() const {
 }
 
 void aiPaddle::update(int screenHeight, const ball *b) {
-    float ballY = b->getPos().second;
+    static int frameCounter = 0;
+    frameCounter++;
 
-    if (ballY < r.y + static_cast<float>(r.height) / 2) {
+    // Only react every 5 frames (makes AI slower)
+    if (frameCounter % 5 != 0) return;
+
+    float ballY = b->getPos().second;
+    float center = r.y + static_cast<float>(r.height) / 2;
+
+    if (ballY < center - 1) {
         moveUp();
-    } else if (ballY > r.y + static_cast<float>(r.height) / 2) {
+    } else if (ballY > center + 1) {
         moveDown(screenHeight);
     }
 }

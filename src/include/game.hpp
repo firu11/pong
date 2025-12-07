@@ -38,6 +38,10 @@ private:
 
     void computeThreadFunc();
 
+    void drawScore();
+
+    void drawMiddleLine();
+
     void clearCanvas() const;
 };
 

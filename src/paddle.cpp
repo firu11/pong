@@ -18,7 +18,7 @@ void paddle::moveDown(int screenHeight) {
     r.y += 1;
 }
 
-void paddle::draw(char **screen) {
+void paddle::draw(char **screen) const {
     int rx = static_cast<int>(std::round(r.x));
     int ry = static_cast<int>(std::round(r.y));
 
@@ -27,16 +27,16 @@ void paddle::draw(char **screen) {
     }
 }
 
-paddle::rect paddle::getRect() {
+paddle::rect paddle::getRect() const {
     return r;
 }
 
-void paddle::updateAIPaddle(ball *b, int screenHeight) {
+void paddle::updateAIPaddle(const ball *b, int screenHeight) {
     float ballY = b->getPos().second;
 
-    if (ballY < this->r.y + this->r.height / 2) {
+    if (ballY < this->r.y + static_cast<float>(this->r.height) / 2) {
         this->moveUp();
-    } else if (ballY > this->r.y + this->r.height / 2) {
+    } else if (ballY > this->r.y + static_cast<float>(this->r.height) / 2) {
         this->moveDown(screenHeight);
     }
 }

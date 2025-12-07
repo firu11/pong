@@ -2,6 +2,7 @@
 #define PONG_UTILS_H
 
 #include <cstdlib>
+#include <iostream>
 
 // Stolen from https://gitlab.fel.cvut.cz/nagyoing/mujprojekt/-/blob/master/main.cpp?ref_type=heads
 inline void set_raw(bool set) {

@@ -21,11 +21,11 @@ public:
     void moveDown(int screenHeight);
 
     // hehehe hezký co GETRECT
-    rect getRect();
+    [[nodiscard]] rect getRect() const;
 
-    void updateAIPaddle(ball *b, int screenHeight);
+    void updateAIPaddle(const ball *b, int screenHeight);
 
-    void draw(char **screen);
+    void draw(char **screen) const;
 };
 
 #endif //PONG_PADDLE_H

@@ -25,7 +25,7 @@ public:
 
     [[nodiscard]] std::pair<float, float> getPos() const;
 
-    void draw(char **screen, std::pair<int, int> screenSize);
+    void draw(char **screen, const std::pair<int, int> &canvasSize) const;
 
 private:
     void bounce(paddle &p);

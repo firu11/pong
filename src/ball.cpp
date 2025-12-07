@@ -31,20 +31,16 @@ bool ball::checkCollision(paddle (&paddles)[2]) {
     auto ballW = static_cast<float>(size.first);
     auto ballH = static_cast<float>(size.second);
 
-    for (int i = 0; i < 2; i++) {
-        auto p = paddles[i].getRect();
-        float paddleX = p.x;
-        float paddleY = p.y;
-        auto paddleW = static_cast<float>(p.width);
-        auto paddleH = static_cast<float>(p.height);
+    for (auto &paddle: paddles) {
+        auto [paddleX, paddleY, paddleW, paddleH] = paddle.getRect();
 
-        bool collisionX = ballX < paddleX + paddleW && ballX + ballW > paddleX;
-        bool collisionY = ballY < paddleY + paddleH && ballY + ballH > paddleY;
+        bool collisionX = ballX < paddleX + static_cast<float>(paddleW) && ballX + ballW > paddleX;
+        bool collisionY = ballY < paddleY + static_cast<float>(paddleH) && ballY + ballH > paddleY;
 
         if (collisionX && collisionY) {
             // došlo ke kolizi
             if (!collided) {
-                bounce(paddles[i]);
+                bounce(paddle);
                 collided = true;
             }
             return true;
@@ -70,9 +66,9 @@ int ball::checkGoalCollision(int screenWidth) const {
 
 void ball::bounce(paddle &p) {
     float paddleTop = p.getRect().y;
-    float ballCenterY = pos.second + size.first / 2.0f;
+    float ballCenterY = pos.second + static_cast<float>(size.first) / 2.0f;
 
-    float collisionPercent = (ballCenterY - paddleTop) / p.getRect().height;
+    float collisionPercent = (ballCenterY - paddleTop) / static_cast<float>(p.getRect().height);
     collisionPercent = std::clamp(collisionPercent, 0.0f, 1.0f);
 
     vec.first = -vec.first;
@@ -80,8 +76,8 @@ void ball::bounce(paddle &p) {
     float maxBounceAngle = 60.0f; // degrees
     float angle = (collisionPercent - 0.5f) * 2 * maxBounceAngle;
     float speed = std::sqrt(vec.first * vec.first + vec.second * vec.second);
-    vec.second = speed * std::sin(angle * std::numbers::pi / 180.0f);
-    vec.first = (vec.first > 0 ? 1 : -1) * std::sqrt(speed * speed - vec.second * vec.second);
+    vec.second = speed * static_cast<float>(std::sin(angle * std::numbers::pi / 180.0f));
+    vec.first = static_cast<float>(vec.first > 0 ? 1 : -1) * std::sqrt(speed * speed - vec.second * vec.second);
 
     speedUp();
 }
@@ -95,9 +91,9 @@ std::pair<float, float> ball::getPos() const {
     return pos;
 }
 
-void ball::draw(char **screen, std::pair<int, int> canvasSize) {
-    int rx = std::round(pos.first);
-    int ry = std::round(pos.second);
+void ball::draw(char **screen, const std::pair<int, int> &canvasSize) const {
+    int rx = static_cast<int>(std::round(pos.first));
+    int ry = static_cast<int>(std::round(pos.second));
 
     if (rx < 0 || ry < 0 || rx > canvasSize.first - 1 || ry > canvasSize.second - 1) return;
 

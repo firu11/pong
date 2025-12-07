@@ -29,6 +29,7 @@ void inputThreadFunc(std::atomic_bool &stop) {
                     case 'B':
                         key = "down";
                         break;
+                    default: ;
                 }
             }
         } else if (ch == 'w' || ch == 's') {
@@ -39,6 +40,7 @@ void inputThreadFunc(std::atomic_bool &stop) {
                 case 's':
                     key = "down";
                     break;
+                default: ;
             }
             // ctrl+c OR q
         } else if (iscntrl(ch) || ch == 'q') {
@@ -58,7 +60,7 @@ void inputThreadFunc(std::atomic_bool &stop) {
     set_raw(false);
 }
 
-float get_paddle_movement() {
+int get_paddle_movement() {
     int paddleMoveSum = 0;
 
     keyboardInputMutex.lock();

@@ -1,8 +1,7 @@
 #ifndef PONG_INPUT_H
 #define PONG_INPUT_H
-#include <utility>
 
-void inputThreadFunc(gameInfo *gi);
+void inputThreadFunc(std::atomic_bool &stop);
 
 float get_paddle_movement();
 

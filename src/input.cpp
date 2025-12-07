@@ -1,16 +1,14 @@
+#include "include/utils.hpp"
+
 #include <iostream>
 #include <mutex>
 #include <queue>
 #include <unistd.h>
-#include <utility>
-
-#include "include/config.hpp"
-#include "include/utils.hpp"
 
 std::queue<std::string> keyboardInputQueue;
 std::mutex keyboardInputMutex;
 
-void inputThreadFunc(gameInfo *gi) {
+void inputThreadFunc(std::atomic_bool &stop) {
     set_raw(true);
 
     char ch;
@@ -44,7 +42,7 @@ void inputThreadFunc(gameInfo *gi) {
             }
             // ctrl+c OR q
         } else if (iscntrl(ch) || ch == 'q') {
-            gi->stop = true;
+            stop = true;
             break;
         } else {
             key += ch;

@@ -1,18 +1,20 @@
+#include "include/paddle.hpp"
+#include "include/ball.hpp"
+
 #include <cmath>
 #include <utility>
 
-#include "include/ball.hpp"
-
 #include <algorithm>
+
 
 ball::ball(std::pair<float, float> startPos) : pos(std::move(startPos)), vec(0, 0) {
 }
 
-void ball::move() {
+void ball::move(int screenHeight) {
     pos.first += vec.first;
     pos.second += vec.second;
 
-    if (checkWallsCollision()) vec.second = -vec.second;
+    if (checkWallsCollision(screenHeight)) vec.second = -vec.second;
 }
 
 void ball::startMoving(float speed, int towardsPlayer) {
@@ -23,7 +25,7 @@ void ball::startMoving(float speed, int towardsPlayer) {
     }
 }
 
-bool ball::checkCollision(paddle paddles[2]) {
+bool ball::checkCollision(paddle (&paddles)[2]) {
     float ballX = pos.first;
     float ballY = pos.second;
     auto ballW = static_cast<float>(size.first);
@@ -52,15 +54,15 @@ bool ball::checkCollision(paddle paddles[2]) {
     return false; // žádná kolize
 }
 
-bool ball::checkWallsCollision() {
-    return pos.second <= 0 || pos.second >= screenHeight;
+bool ball::checkWallsCollision(int screenHeight) const {
+    return pos.second <= 0 || pos.second >= static_cast<float>(screenHeight);
 }
 
-int ball::checkGoalCollision() {
+int ball::checkGoalCollision(int screenWidth) const {
     if (pos.first <= 0) {
         return 1;
     }
-    if (pos.first >= screenWidth) {
+    if (pos.first >= static_cast<float>(screenWidth)) {
         return 2;
     }
     return 0;
@@ -93,11 +95,11 @@ std::pair<float, float> ball::getPos() const {
     return pos;
 }
 
-void ball::draw(char (&screen)[screenHeight][screenWidth]) {
+void ball::draw(char **screen, std::pair<int, int> canvasSize) {
     int rx = std::round(pos.first);
     int ry = std::round(pos.second);
 
-    if (rx < 0 || ry < 0 || rx > screenWidth - 1 || ry > screenHeight - 1) return;
+    if (rx < 0 || ry < 0 || rx > canvasSize.first - 1 || ry > canvasSize.second - 1) return;
 
     screen[ry][rx] = '@';
 }

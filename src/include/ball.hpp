@@ -3,7 +3,7 @@
 #include <utility>
 #include <vector>
 
-#include "paddle.hpp"
+class paddle; // forward declaration to avoid circular imports I guess
 
 class ball {
     std::pair<float, float> pos;
@@ -17,22 +17,22 @@ public:
 
     void startMoving(float speed = 1, int towardsPlayer = 1);
 
-    void move();
+    void move(int screenHeight);
 
-    bool checkCollision(paddle paddles[2]);
+    bool checkCollision(paddle (&paddles)[2]);
 
-    int checkGoalCollision();
+    [[nodiscard]] int checkGoalCollision(int screenWidth) const;
 
-    std::pair<float, float> getPos() const;
+    [[nodiscard]] std::pair<float, float> getPos() const;
 
-    void draw(char (&screen)[screenHeight][screenWidth]);
+    void draw(char **screen, std::pair<int, int> screenSize);
 
 private:
     void bounce(paddle &p);
 
     void speedUp();
 
-    bool checkWallsCollision();
+    [[nodiscard]] bool checkWallsCollision(int screenHeight) const;
 };
 
 

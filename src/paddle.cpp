@@ -1,11 +1,11 @@
 #include "include/paddle.hpp"
 
-#include <cmath>
-
 #include "include/ball.hpp"
 
-paddle::paddle(float x, float y, int width, int height) {
-    r = rect(x, y, width, height);
+#include <cmath>
+
+
+paddle::paddle(float x, float y, int width, int height) : r(x, y, width, height) {
 }
 
 void paddle::moveUp() {
@@ -13,14 +13,14 @@ void paddle::moveUp() {
     r.y -= 1;
 }
 
-void paddle::moveDown() {
-    if (r.y + r.height > screenHeight - 1) return;
+void paddle::moveDown(int screenHeight) {
+    if (r.y + static_cast<float>(r.height) > static_cast<float>(screenHeight) - 1) return;
     r.y += 1;
 }
 
-void paddle::draw(char (&screen)[screenHeight][screenWidth]) {
-    int rx = std::round(r.x);
-    int ry = std::round(r.y);
+void paddle::draw(char **screen) {
+    int rx = static_cast<int>(std::round(r.x));
+    int ry = static_cast<int>(std::round(r.y));
 
     for (int i = 0; i < r.height; i++) {
         screen[ry + i][rx] = '|';
@@ -31,12 +31,12 @@ paddle::rect paddle::getRect() {
     return r;
 }
 
-void paddle::updateAIPaddle(ball *b) {
+void paddle::updateAIPaddle(ball *b, int screenHeight) {
     float ballY = b->getPos().second;
 
     if (ballY < this->r.y + this->r.height / 2) {
         this->moveUp();
     } else if (ballY > this->r.y + this->r.height / 2) {
-        this->moveDown();
+        this->moveDown(screenHeight);
     }
 }

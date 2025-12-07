@@ -1,7 +1,7 @@
 #ifndef PONG_PADDLE_H
 #define PONG_PADDLE_H
 
-#include "config.hpp"
+class ball; // forward declaration to avoid circular imports I guess
 
 class paddle {
     struct rect {
@@ -18,14 +18,14 @@ public:
 
     void moveUp();
 
-    void moveDown();
+    void moveDown(int screenHeight);
 
     // hehehe hezký co GETRECT
     rect getRect();
 
-    void updateAIPaddle(ball *b);
+    void updateAIPaddle(ball *b, int screenHeight);
 
-    void draw(char (&screen)[screenHeight][screenWidth]);
+    void draw(char **screen);
 };
 
 #endif //PONG_PADDLE_H

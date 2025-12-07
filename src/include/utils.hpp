@@ -1,5 +1,6 @@
 #ifndef PONG_UTILS_H
 #define PONG_UTILS_H
+
 #include <cstdlib>
 
 // Stolen from https://gitlab.fel.cvut.cz/nagyoing/mujprojekt/-/blob/master/main.cpp?ref_type=heads

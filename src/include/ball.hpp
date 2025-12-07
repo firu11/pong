@@ -13,13 +13,13 @@ class ball {
     bool collided = false; // prevent from bouncing multiple times from a single paddle
 
 public:
-    ball(std::pair<float, float> startPos);
+    explicit ball(std::pair<float, float> startPos);
 
     void startMoving(float speed = 1, int towardsPlayer = 1);
 
     void move(int screenHeight);
 
-    bool checkCollision(paddle (&paddles)[2]);
+    bool checkCollision(paddle *paddles[2]);
 
     [[nodiscard]] int checkGoalCollision(int screenWidth) const;
 

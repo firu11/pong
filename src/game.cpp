@@ -21,8 +21,8 @@ game::game(std::pair<int, int> canvasSize, int pointsToWin, int targetFps) : pad
         this->canvas[i] = new char[canvasSize.first];
     }
 
-    paddles[0] = new playerPaddle(2, canvasSize.second / 2 - 7 / 2, 1, 7);
-    paddles[1] = new aiPaddle(canvasSize.first - 3, canvasSize.second / 2 - 7 / 2, 1, 7);
+    paddles[0] = new playerPaddle(3, canvasSize.second / 2 - 7 / 2, 1, 7);
+    paddles[1] = new aiPaddle(canvasSize.first - 4, canvasSize.second / 2 - 7 / 2, 1, 7);
 
     ballInstance = new ball({canvasSize.first / 2, canvasSize.second / 2});
 }
@@ -56,8 +56,8 @@ void game::goal(int pad) {
 
     delete paddles[0];
     delete paddles[1];
-    paddles[0] = new playerPaddle(2, canvasSize.second / 2 - 7 / 2, 1, 7);
-    paddles[1] = new aiPaddle(canvasSize.first - 2 - 1, canvasSize.second / 2 - 7 / 2, 1, 7);
+    paddles[0] = new playerPaddle(3, canvasSize.second / 2 - 7 / 2, 1, 7);
+    paddles[1] = new aiPaddle(canvasSize.first - 4, canvasSize.second / 2 - 7 / 2, 1, 7);
 
     std::this_thread::sleep_for(std::chrono::milliseconds(300));
     ballInstance->startMoving(0.5);
@@ -107,6 +107,7 @@ void game::computeThreadFunc() {
 
         // check states
         ballInstance->move(canvasSize.second);
+        ballInstance->checkCollision(paddles);
         auto g = ballInstance->checkGoalCollision(canvasSize.first);
         if (g != 0) goal(g);
 

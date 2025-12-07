@@ -25,14 +25,14 @@ void ball::startMoving(float speed, int towardsPlayer) {
     }
 }
 
-bool ball::checkCollision(paddle (&paddles)[2]) {
+bool ball::checkCollision(paddle *paddles[2]) {
     float ballX = pos.first;
     float ballY = pos.second;
     auto ballW = static_cast<float>(size.first);
     auto ballH = static_cast<float>(size.second);
 
-    for (auto &paddle: paddles) {
-        auto [paddleX, paddleY, paddleW, paddleH] = paddle.getRect();
+    for (int i = 0; i < 2; ++i) {
+        auto [paddleX, paddleY, paddleW, paddleH] = paddles[i]->getRect();
 
         bool collisionX = ballX < paddleX + static_cast<float>(paddleW) && ballX + ballW > paddleX;
         bool collisionY = ballY < paddleY + static_cast<float>(paddleH) && ballY + ballH > paddleY;
@@ -40,7 +40,7 @@ bool ball::checkCollision(paddle (&paddles)[2]) {
         if (collisionX && collisionY) {
             // došlo ke kolizi
             if (!collided) {
-                bounce(paddle);
+                bounce(*paddles[i]);
                 collided = true;
             }
             return true;
@@ -66,7 +66,7 @@ int ball::checkGoalCollision(int screenWidth) const {
 
 void ball::bounce(paddle &p) {
     float paddleTop = p.getRect().y;
-    float ballCenterY = pos.second + static_cast<float>(size.first) / 2.0f;
+    float ballCenterY = pos.second + static_cast<float>(size.second) / 2.0f;
 
     float collisionPercent = (ballCenterY - paddleTop) / static_cast<float>(p.getRect().height);
     collisionPercent = std::clamp(collisionPercent, 0.0f, 1.0f);

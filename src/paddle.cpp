@@ -31,12 +31,20 @@ paddle::rect paddle::getRect() const {
     return r;
 }
 
-void paddle::updateAIPaddle(const ball *b, int screenHeight) {
+void aiPaddle::update(int screenHeight, const ball *b) {
     float ballY = b->getPos().second;
 
-    if (ballY < this->r.y + static_cast<float>(this->r.height) / 2) {
-        this->moveUp();
-    } else if (ballY > this->r.y + static_cast<float>(this->r.height) / 2) {
-        this->moveDown(screenHeight);
+    if (ballY < r.y + static_cast<float>(r.height) / 2) {
+        moveUp();
+    } else if (ballY > r.y + static_cast<float>(r.height) / 2) {
+        moveDown(screenHeight);
     }
+}
+
+void playerPaddle::update(int screenHeight, const ball *b) {
+    auto move = static_cast<float>(get_paddle_movement());
+    if (move < 0)
+        moveUp();
+    else if (move > 0)
+        moveDown(screenHeight);
 }

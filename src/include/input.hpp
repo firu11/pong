@@ -4,6 +4,6 @@
 
 void inputThreadFunc(gameInfo *gi);
 
-std::pair<float, float> get_paddle_movement();
+float get_paddle_movement();
 
 #endif //PONG_INPUT_H

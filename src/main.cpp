@@ -9,6 +9,25 @@
 #include "include/input.hpp"
 #include "include/utils.hpp"
 
+void goal(gameInfo *gi, int pad) {
+    if (pad == 1) gi->score.first += 1;
+    else if (pad == 2) gi->score.second += 1;
+
+    if (gi->score.first > 5); // end
+    else if (gi->score.first > 5); // end
+
+    delete gi->ballInstance;
+    gi->ballInstance = new ball({screenWidth / 2, screenHeight / 2});
+
+    delete gi->paddles[0];
+    delete gi->paddles[1];
+    gi->paddles[0] = new paddle(2, screenHeight / 2 - 7 / 2, 1, 7);
+    gi->paddles[1] = new paddle(screenWidth - 2 - 1, screenHeight / 2 - 7 / 2, 1, 7);
+
+    std::this_thread::sleep_for(std::chrono::milliseconds(300));
+    gi->ballInstance->startMoving(0.5);
+}
+
 void clearCanvas(gameInfo *gi) {
     for (int y = 0; y < screenHeight; y++) {
         for (int x = 0; x < screenWidth; x++) {
@@ -47,24 +66,27 @@ void render(gameInfo *gi) {
 
 void computeThreadFunc(gameInfo *gi) {
     while (!gi->stop) {
-        auto [moveP1, moveP2] = get_paddle_movement();
-        if (moveP1 > 0) {
+        // move paddles
+        float move = get_paddle_movement();
+        if (move > 0) {
             gi->paddles[0]->moveDown();
-        } else if (moveP1 < 0) {
+        } else if (move < 0) {
             gi->paddles[0]->moveUp();
         }
-        if (moveP2 > 0) {
-            gi->paddles[1]->moveDown();
-        } else if (moveP2 < 0) {
-            gi->paddles[1]->moveUp();
-        }
+        gi->paddles[1]->updateAIPaddle(gi->ballInstance);
 
+        // check states
+        gi->ballInstance->move();
+        auto g = gi->ballInstance->checkGoalCollision();
+        if (g != 0) goal(gi, g);
+
+        // draw
         clearCanvas(gi);
         gi->paddles[0]->draw(gi->canvas);
         gi->paddles[1]->draw(gi->canvas);
-
-
+        gi->ballInstance->draw(gi->canvas);
         render(gi);
+
         std::this_thread::sleep_for(std::chrono::milliseconds(1000 / targetFps));
     }
 }
@@ -72,10 +94,10 @@ void computeThreadFunc(gameInfo *gi) {
 int main() {
     gameInfo gi = {
         .paddles = {
-            new paddle(2, screenHeight / 2 - 6 / 2, 1, 6),
-            new paddle(screenWidth - 2 - 1, screenHeight / 2 - 6 / 2, 1, 6)
+            new paddle(2, screenHeight / 2 - 7 / 2, 1, 7),
+            new paddle(screenWidth - 2 - 1, screenHeight / 2 - 7 / 2, 1, 7)
         },
-        .ballInstance = new ball(std::pair{screenWidth / 2, screenHeight / 2}),
+        .ballInstance = new ball({screenWidth / 2, screenHeight / 2}),
     };
 
     clearTerminalScreen();
@@ -83,6 +105,9 @@ int main() {
 
     std::thread t1(inputThreadFunc, &gi);
     std::thread t2(computeThreadFunc, &gi);
+
+    std::this_thread::sleep_for(std::chrono::milliseconds(1000)); // TODO lepe
+    gi.ballInstance->startMoving(0.5);
 
     t1.join();
     t2.join();

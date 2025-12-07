@@ -23,6 +23,8 @@ public:
     // hehehe hezký co GETRECT
     rect getRect();
 
+    void updateAIPaddle(ball *b);
+
     void draw(char (&screen)[screenHeight][screenWidth]);
 };
 

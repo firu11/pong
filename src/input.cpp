@@ -26,20 +26,20 @@ void inputThreadFunc(gameInfo *gi) {
             if (seq[0] == '[') {
                 switch (seq[1]) {
                     case 'A':
-                        key = "2-up";
+                        key = "up";
                         break;
                     case 'B':
-                        key = "2-down";
+                        key = "down";
                         break;
                 }
             }
         } else if (ch == 'w' || ch == 's') {
             switch (ch) {
                 case 'w':
-                    key = "1-up";
+                    key = "up";
                     break;
                 case 's':
-                    key = "1-down";
+                    key = "down";
                     break;
             }
             // ctrl+c OR q
@@ -60,24 +60,19 @@ void inputThreadFunc(gameInfo *gi) {
     set_raw(false);
 }
 
-std::pair<float, float> get_paddle_movement() {
-    int paddle1move = 0;
-    int paddle2move = 0;
+float get_paddle_movement() {
+    int paddleMoveSum = 0;
 
     keyboardInputMutex.lock();
     while (!keyboardInputQueue.empty()) {
-        if (keyboardInputQueue.front() == "1-up") {
-            paddle1move--;
-        } else if (keyboardInputQueue.front() == "1-down") {
-            paddle1move++;
-        } else if (keyboardInputQueue.front() == "2-up") {
-            paddle2move--;
-        } else if (keyboardInputQueue.front() == "2-down") {
-            paddle2move++;
+        if (keyboardInputQueue.front() == "up") {
+            paddleMoveSum--;
+        } else if (keyboardInputQueue.front() == "down") {
+            paddleMoveSum++;
         }
         keyboardInputQueue.pop();
     }
     keyboardInputMutex.unlock();
 
-    return {paddle1move, paddle2move};
+    return paddleMoveSum;
 }

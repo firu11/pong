@@ -2,15 +2,19 @@
 
 #include <cmath>
 
+#include "include/ball.hpp"
+
 paddle::paddle(float x, float y, int width, int height) {
     r = rect(x, y, width, height);
 }
 
 void paddle::moveUp() {
+    if (r.y <= 0) return;
     r.y -= 1;
 }
 
 void paddle::moveDown() {
+    if (r.y + r.height > screenHeight - 1) return;
     r.y += 1;
 }
 
@@ -24,5 +28,15 @@ void paddle::draw(char (&screen)[screenHeight][screenWidth]) {
 }
 
 paddle::rect paddle::getRect() {
-    return rect{1, 1, 2, 2};
+    return r;
+}
+
+void paddle::updateAIPaddle(ball *b) {
+    float ballY = b->getPos().second;
+
+    if (ballY < this->r.y + this->r.height / 2) {
+        this->moveUp();
+    } else if (ballY > this->r.y + this->r.height / 2) {
+        this->moveDown();
+    }
 }

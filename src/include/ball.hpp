@@ -10,6 +10,7 @@ class ball {
     std::pair<float, float> vec;
 
     std::pair<int, int> size = std::pair(1, 1);
+    bool collided = false; // prevent from bouncing multiple times from a single paddle
 
 public:
     ball(std::pair<float, float> startPos);
@@ -18,12 +19,20 @@ public:
 
     void move();
 
-    bool checkCollision(std::vector<paddle> &paddles);
+    bool checkCollision(paddle paddles[2]);
 
-    std::pair<int, int> getPosOnScreen() const;
+    int checkGoalCollision();
+
+    std::pair<float, float> getPos() const;
+
+    void draw(char (&screen)[screenHeight][screenWidth]);
 
 private:
     void bounce(paddle &p);
+
+    void speedUp();
+
+    bool checkWallsCollision();
 };
 
 

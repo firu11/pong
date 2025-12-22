@@ -35,7 +35,7 @@ void aiPaddle::update(int screenHeight, const ball *b) {
     static int frameCounter = 0;
     frameCounter++;
 
-    // Only react every 5 frames (makes AI slower)
+    // only reacts every 5 frames to make him a little more dumb
     if (frameCounter % 5 != 0) return;
 
     float ballY = b->getPos().second;

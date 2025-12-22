@@ -2,7 +2,6 @@
 #define PONG_GAME_H
 
 #include "ball.hpp"
-#include "paddle.hpp"
 
 #include <atomic>
 #include <queue>

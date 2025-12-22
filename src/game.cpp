@@ -1,12 +1,13 @@
 #include "include/game.hpp"
 
 #include "include/input.hpp"
-#include "include/utils.hpp"
 
 #include <cstdlib>
 #include <iostream>
 #include <thread>
 #include <array>
+
+#include "include/paddle.hpp"
 
 
 game::game(std::pair<int, int> canvasSize, int pointsToWin, int targetFps) : paddles{} {

@@ -1,7 +1,6 @@
 #include "include/paddle.hpp"
 #include "include/ball.hpp"
 
-#include <numbers>
 #include <cmath>
 #include <utility>
 
@@ -77,7 +76,7 @@ void ball::bounce(paddle &p) {
     float maxBounceAngle = 60.0f; // degrees
     float angle = (collisionPercent - 0.5f) * 2 * maxBounceAngle;
     float speed = std::sqrt(vec.first * vec.first + vec.second * vec.second);
-    vec.second = speed * static_cast<float>(std::sin(angle * std::numbers::pi / 180.0f));
+    vec.second = speed * static_cast<float>(std::sin(angle * 3.1415926536 / 180.0f));
     vec.first = static_cast<float>(vec.first > 0 ? 1 : -1) * std::sqrt(speed * speed - vec.second * vec.second);
 
     speedUp();

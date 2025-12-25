@@ -3,7 +3,7 @@
 #include <iostream>
 #include <mutex>
 #include <queue>
-#include <unistd.h>
+#include <atomic>
 
 std::queue<std::string> keyboardInputQueue;
 std::mutex keyboardInputMutex;
@@ -12,38 +12,27 @@ void inputThreadFunc(std::atomic_bool &stop) {
     set_raw(true);
 
     char ch;
-    while (read(STDIN_FILENO, &ch, 1) == 1) {
+    while (std::cin.get(ch)) {
         std::string key;
-        // esc seq
         if (ch == '\x1b') {
             char seq[2];
-            if (read(STDIN_FILENO, &seq[0], 1) != 1) continue;
-            if (read(STDIN_FILENO, &seq[1], 1) != 1) continue;
-
-            // Control Sequence Introducer
-            if (seq[0] == '[') {
-                switch (seq[1]) {
-                    case 'A':
-                        key = "up";
-                        break;
-                    case 'B':
-                        key = "down";
-                        break;
-                    default: ;
+            if (std::cin.get(seq[0]) && std::cin.get(seq[1])) {
+                if (seq[0] == '[') {
+                    switch (seq[1]) {
+                        case 'A':
+                            key = "up";
+                            break;
+                        case 'B':
+                            key = "down";
+                            break;
+                        default: ;
+                    }
                 }
             }
         } else if (ch == 'w' || ch == 's') {
-            switch (ch) {
-                case 'w':
-                    key = "up";
-                    break;
-                case 's':
-                    key = "down";
-                    break;
-                default: ;
-            }
-            // ctrl+c OR q
-        } else if (iscntrl(ch) || ch == 'q') {
+            key = (ch == 'w') ? "up" : "down";
+        } else if ((ch >= 0 && ch <= 31) || ch == 127 || ch == 'q') {
+            // ASCII 0-31 are control chars, 127 is DEL
             stop = true;
             break;
         } else {
